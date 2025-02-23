@@ -2248,6 +2248,27 @@ void MySensorsBase::ParseLine(const std::string& sLine)
 			//SendNodeSetCommand(node_id, child_sensor_id, message_type, (_eSetType)sub_type, tmpstr, true, 1000);
 			SendNodeCommand(node_id, child_sensor_id, message_type, sub_type, tmpstr);
 			break;
+		case V_VOLUME:
+  			{
+   			//experimental code, respond for V_VOLUME request
+   			Log(LOG_ERROR, "Request from ESP32, Node_id:%d, Child:%d, sub_type:%d, hwid:%d", node_id, child_sensor_id, sub_type, m_HwdID);
+   			std::vector<std::vector<std::string> > result;
+   			result = m_sql.safe_query("SELECT ID, sValue FROM DeviceStatus WHERE HardwareID==%d", m_HwdID);
+   			int IDX;
+   			int VALUE_V_VOLUME;
+   			if (!result.empty())
+     				{
+     				VALUE_V_VOLUME = atoi(result[0][1].c_str());
+     				SendNodeCommand(node_id, child_sensor_id, message_type, sub_type, result[0][1].c_str());
+     				Log(LOG_ERROR,"Im sending:  Node_id:%d, Child:%d, sub_type:%d, hwid:%d, value:%d",node_id, child_sensor_id, sub_type, m_HwdID, VALUE_V_VOLUME);
+     				}
+     			else
+     				{
+     				Log(LOG_ERROR,"Error: You ask for bad sensor!.");.
+     				break;
+     				}
+   			break;
+  			}
 		case V_TEXT:
 		{
 			//Get Text sensor value from the database
