@@ -564,6 +564,20 @@ void MySensorsBase::SendSensor2Domoticz(_tMySensorNode* pNode, _tMySensorChild* 
 		pChild->GetValue(V_TEMP, Temp);
 		_tMySensorChild* pChildHum = FindChildWithValueType(pChild->nodeID, V_HUM, pChild->groupID);
 		_tMySensorChild* pChildBaro = FindChildWithValueType(pChild->nodeID, V_PRESSURE, pChild->groupID);
+		
+		// no COMBO without same CHILD_ID
+		
+		if (pChildHum && pChildHum->childID != pChild->childID).
+			{
+    		pChildHum = nullptr;
+			}
+		if (pChildBaro && pChildBaro->childID != pChild->childID).
+			{
+    		pChildBaro = nullptr;
+			}
+
+		// end COMBO.
+		
 		if (pChildHum && pChildBaro)
 		{
 			int Humidity = 0;
@@ -636,6 +650,19 @@ void MySensorsBase::SendSensor2Domoticz(_tMySensorNode* pNode, _tMySensorChild* 
 	{
 		_tMySensorChild* pChildTemp = FindChildWithValueType(pChild->nodeID, V_TEMP, pChild->groupID);
 		_tMySensorChild* pChildBaro = FindChildWithValueType(pChild->nodeID, V_PRESSURE, pChild->groupID);
+		// COMBO FIX
+		if (pChildTemp && pChildTemp->childID != pChild->childID).
+    		{
+    		pChildTemp = nullptr;
+    		}
+		if (pChildBaro && pChildBaro->childID != pChild->childID).
+			{
+    		pChildBaro = nullptr;
+			}
+		// COMBO END
+
+
+		// COMBO
 		int forecast = bmpbaroforecast_unknown;
 		_tMySensorChild* pSensorForecast = FindChildWithValueType(pChild->nodeID, V_FORECAST, pChild->groupID);
 		if (pSensorForecast)
